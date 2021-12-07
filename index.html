@@ -1,0 +1,1383 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TMPS00033</title>
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="header-wrap">
+	<div class="logo">
+		<h1>Control of a Fluidized Catalytic Cracking Unit-Template</h1>
+    </div>
+</div><!---header-wrap-End--->
+
+
+<div class="page-wrap">
+<div class="wrap3">  
+  <div class=" leftcol">
+  <div class="panel">
+  	<div class="title">
+  		<h1>About </h1>
+        <span>A scientific paper</span>
+    </div>
+  	<div class="content">
+      Control of a Fluidized Catalytic Cracking Unit
+      Process Control CHEN 30091/30191
+      ADAM BRADFORD-TIMLIN - 9933571
+      LOUIS BRACKENBURY - 9931733
+      DECEMBER 4, 2019
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      1
+      TABLE OF CONTENTS
+      Task a ............................................................................................................................. 2
+      Investigate the dynamics of your system and extract an approximate first order transfer
+      function model with delay. Clearly discuss and justify the procedures you follow as well as all
+      your findings. ..........................................................................................................................2
+      Task b ............................................................................................................................. 7
+      Demonstrate the robustness of the approximate model you obtained in (a) illustrating that it
+      works for a range of different (not only step) inputs. Clearly illustrate, discuss and justify all
+      your findings. ..........................................................................................................................7
+      Sine Function...........................................................................................................................8
+      Ramp Function........................................................................................................................8
+      Pulse Generator Function........................................................................................................9
+      Uniform Random Number Function .......................................................................................9
+      Task c ............................................................................................................................10
+      Design stable controllers based on your approximate system using different tuning
+      methodologies (you will have to consult the literature for part of this task). ..........................10
+      Ziegler-Nichols Method (PI & PID).......................................................................................10
+      Cohen-Coon Method (PI & PID)...............................................................................................14
+      Internal Model Control With Delay Approximated By 1st Order Taylor Expansion .....................18
+      Internal Model Control With Delay Approximated By pade......................................................23
+      Summary................................................................................................................................28
+      Task d.............................................................................................................................29
+      Explain clearly which units of your block use deviation variables as inputs and outputs and
+      which real variables, by using appropriate diagrams................................................................29
+      Task e.............................................................................................................................31
+      Choose your two best controllers. Explain why they are the best. For the closed-loop simulation
+      of the real system with these best controllers, plot the inputs as well as Trg as a function of
+      time. Do you think the values of the inputs and of Trg are physical/realistic? If they are not you
+      need to retune your controllers so that they produce realistic outputs. Clearly justify your work
+      and answers...........................................................................................................................31
+      Task F.............................................................................................................................33
+      For the best two controllers you have designed you need to find:............................................33
+      I. What is the range of set-points that your controller can be trusted, i.e. all inputs and
+      outputs remain realistic and the set-point is SATISFIED?..........................................................33
+      II. For the nominal set-point, what is the range of input disturbances that your controller
+      can reject, while all inputs and outputs remain realistic? Clearly justify all your answers. .........38
+      Nomenclature.................................................................................................................46
+      Bibliography...................................................................................................................47
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      2
+      TASK A
+      INVESTIGATE THE DYNAMICS OF YOUR SYSTEM AND EXTRACT AN
+      APPROXIMATE FIRST ORDER TRANSFER FUNCTION MODEL WITH
+      DELAY. CLEARLY DISCUSS AND JUSTIFY THE PROCEDURES YOU
+      FOLLOW AS WELL AS ALL YOUR FINDINGS.
+      The two manipulated variables, which are present within the Fluid Catalytic Cracking Unit
+      (FCCU), that provide an input to the system are Fs (the catalyst recycle rate) and Fa (rate of
+      regenerator air). There are also three measured variables: the regenerator’s gas cyclone
+      temperature (Tcy), the regenerator bed temperature (Trg) and the riser outlet temperature (T1).
+      In order to develop the dynamic model for a system, the following procedure is followed:
+      1. Identify input and output variables.
+      2. Select an input variable and introduce a step change.
+      3. Select and output variable and trace its response.
+      4. Develop a first order model, with delay, to approximate the response.
+      Firstly, it was necessary to induce a step change in the regenerator air rate, in order to produce
+      a 1st order transfer function from the FCCU system. Prior to a step change, the output Tcy at
+      steady state is showing in Figure 1a; however, after a step change of 1 is introduced at time
+      zero (from 25.35 kg s-1 to 26.35 kg s-1), the resulting output is highlighted in Figure 1b.
+      Figure 1a – Tcy at steady state.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      3
+      Figure 1b - Tcy with a step change of 1 K.
+      Firstly, it is apparent that the system reaches steady state after the step change at approximately
+      120 s, attaining a maximum value of 999.0 K. As well as this, there is a significant degree of
+      fluctuation within Figure 1b, due to the noise within the system; and therefore, the first order
+      approximated transfer function will have a degree of error associated to it.
+      In order to approximate the first order transfer function, the below derivation must be
+      transferred into Laplace time. Equation 1 is the first order differential, modelling the output in
+      the time domain, with y representing the output and f(t) representing the input. Kp and 𝜏
+      representing the steady state gain and the process time constant respectively (both being
+      characteristic of the system at hand).
+      𝜏
+      𝑑𝑦
+      𝑑𝑡 + 𝑦 = 𝐾𝑝𝑓(𝑡) (1)
+      Equation 2 shows the conversion of the variables to deviation variables, a necessary step prior
+      to conversion to Laplace time. y’ represents the process output and output its deviation from
+      steady state. The same principle is equally applied to input, f(t).
+      𝜏
+      𝑑𝑦′
+      𝑑𝑡 + 𝑦
+      ′ = 𝐾𝑝𝑓′(𝑡) (2)
+      Between Equation 2 and 3, there has been a transfer to Laplace time.
+      𝜏𝑠𝑦̃(𝑠) + 𝑦̃(𝑠) = 𝐾𝑝𝑓′(𝑠) (3)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      4
+      Equation 4 is a re-arrangement of Equation 3, in terms of output divided by input – the
+      definition of the transfer function.
+      𝐺(𝑠) =
+      𝑦̃(𝑠)
+      𝑓̃(𝑠)
+      =
+      𝐾𝑝
+      𝜏𝑠 + 1
+      (4)
+      The transfer function can be better approximated accounting for the time delay, which is
+      defined in Equation 5.
+      𝐺(𝑠) =
+      𝐾𝑝
+      𝜏𝑠 + 1
+      𝑒
+      −𝑡𝑑𝑠
+      (5)
+      There are two methods available in which the delay can be calculated, one graphically, and the
+      other is through calculating back after determining the gradient. However, before this occurs,
+      the value for Kp can be found. Figure 2 highlights the change in output; necessary to determine
+      the Kp, with the definition outlined by Equation 6.
+      Figure 2 - Tcy with a step change of 1 K with measured output change.
+      𝐾𝑝 =
+      ∆ (𝑂𝑢𝑡𝑝𝑢𝑡)𝑆𝑡𝑒𝑎𝑑𝑦 𝑆𝑡𝑎𝑡𝑒
+      ∆ (𝐼𝑛𝑝𝑢𝑡) 𝑆𝑡𝑒𝑎𝑑𝑦 𝑆𝑡𝑎𝑡𝑒 (6)
+      Having changed the output for a step change of 1, Kp can be calculated, shown in Equation 7.
+      Using the Simulink software, the output value was determined through measurement at times
+      0 (at steady state, prior to the step) and 650 s (at steady state after the step) to calculate the
+      change in output.
+      𝐾𝑝 =
+      999.0 − 988.2
+      26.35 − 25.35 = 10.80 (7)
+      ΔOutput (Temperature / K)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      5
+      The graphical method is depicted in Figure 3, with points chosen to calculate the initial
+      gradient of the approximated first order curve. This would allow extrapolation back to the yaxis origin to determine the time delay. The values chosen are illustrated within the figure.
+      Figure 3 – Method to obtain the time delay of the system.
+      Therefore, the gradient is calculated using the points (10.185, 988.70) and (11.829, 989.70).
+      This is shown in Equation 8. However, after shifting the curve by 988.2 (the temperature at
+      time 0), the points are (10.185, 0.500) and (11.829, 1.500).
+      𝑚 =
+      1.500 − 0.500
+      11.829 − 10.185 = 0.608 (8)
+      At the point (10.185, 0.500), and using the previously calculated gradient, the y-intercept can
+      be determined as 𝑐 = −5.692. Equation 9 and 10 are then used to determine the time delay,
+      when 𝑦 = 0.
+      𝑦 = 0.608𝑥 − 5.692 (9)
+      𝑥 = 𝑡𝑑 =
+      5.692
+      0.608
+      = 9.363 𝑠 (10)
+      When comparing this to the result determined graphically, in which a value of 9.615 s was
+      determined, there is a minimal difference of 0.252 s; however, carrying forward, the previous
+      value listed in Equation 10 will be used.
+      After this, the value of the process time constant 𝜏𝑝 must be determined, through finding the
+      time that is required for the system to reach 63.2 % of the new steady state, minus the time 
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      6
+      delay td. The corresponding temperature of the system at T63.2% was found to be 995.026 K and
+      is shown in Equation 11.
+      𝑇63.2% = 998.2 𝐾 + 0.632(999.0 − 988.2)𝐾 = 995.026 K (11)
+      Using this value, the time at which the temperature of 995.026 K is achieved can be determined
+      graphically. The value is found to be 27.600 s; however, there is a degree of error in reading
+      this value, due to the noise present within the system. Following this the process time constant
+      𝜏𝑝 is calculated as previously described and shown in Equation 12 and 13.
+      𝜏𝑝 = 𝑡63.2% − 𝑡𝑑 (12)
+      𝜏𝑝 = 27.600𝑠 − 9.363𝑠 = 18.237𝑠 (13)
+      The time delay is due to a lag effect within the system, in which the gas cyclone temperature
+      does not increase, with increasing regenerator air rate, thereby proving the existence of dead
+      time.
+      Using the calculated values, the approximated transfer function can then be found through
+      implementation of Equation 5. Therefore, the final approximated first order transfer function
+      is defined in Equation 14.
+      𝐺(𝑠) =
+      10.8
+      18.237𝑠 + 1
+      𝑒
+      −9.363𝑠
+      (14)
+      Figure 4 shows this approximated transfer function in comparison to the actual system
+      dynamics curve. Figure 4 highlights that the calculated transfer function is a representative
+      approximation of the actual system dynamics.
+      Figure 4 – Approximated transfer function and real system with a step change of 1 K at t=0.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      7
+      TASK B
+      DEMONSTRATE THE ROBUSTNESS OF THE APPROXIMATE MODEL YOU
+      OBTAINED IN (A) ILLUSTRATING THAT IT WORKS FOR A RANGE OF
+      DIFFERENT (NOT ONLY STEP) INPUTS. CLEARLY ILLUSTRATE, DISCUSS
+      AND JUSTIFY ALL YOUR FINDINGS.
+      The definition of the robustness of the approximated model is its ability to cope with
+      disturbances or varying system parameters (Smith, 1995). To test the robustness of the
+      approximated model obtained in part (A) various inputs were connected to the step, these
+      include; the sine function, pulse generator function, uniform random number function and the
+      ramp function. The robustness of the approximated model will be verified through the addition
+      of each of these inputs whilst monitoring the output, evaluating the similarity of the
+      approximated model against that of the actual system dynamics. Figure 5 depicts the addition
+      of these inputs, with each added separately as in individual investigation.
+      Figure 5 – Simulink model used to induce different input functions.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      8
+      SINE FUNCTION
+      A sinusoidal wave is produced when implementing the sine function to the system. The
+      amplitude for the test was set at a value of 1, as well as the frequency at 1 rad s-1. The bias,
+      phase and sample time were kept at a value of 0. This ensures that the block is operating in a
+      continuous mode. Studying Figure 6, it shows that the approximate model is a good
+      approximation to the system dynamics.
+      Figure 6 – Real and approximated model showing change to Tcy with time inputting sine function.
+      RAMP FUNCTION
+      Secondly, a test was conducted to see the robustness of the approximated model using the ramp
+      input. A ramp of 0.5 was set, with a start time of 0 and an initial output of 0 also. The results
+      from this test can be seen in Figure 7. The model can be seen as a good approximation within
+      the range of 0 to 55 s; however, beyond this, there is a significant degree of deviation between
+      the approximated model and the system dynamics, with the approximated model showing a
+      linear increasing rate of overshoot.
+      Figure 7 – Real and approximated model showing change to Tcy with time inputting ramp function.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      9
+      PULSE GENERATOR FUNCTION
+      A test was also conducted using the pulse generator function using an amplitude of 0.5, with a
+      set period of 10 s; a pulse width of 5%; and a time delay of 0 s. Figure 8 highlights the results
+      of this, with the output of the model generating continuous waves. Despite the fluctuation
+      around the model, it can be considered to be a good approximation.
+      Figure 8 – Real and approximated model showing change to Tcy with time inputting pulse generator function.
+      UNIFORM RANDOM NUMBER FUNCTION
+      The uniform random number input provides a randomly uniformly distributed output signal,
+      with the output being repeatable for a given seed. The conditions set were a minimum and
+      maximum of -1 and 1 respectively, with a sample time of 0.5 s and a seed of 0. The model is
+      seen to be robust, as the system dynamics do not deviate from the approximated model. This
+      is highlighted in Figure 9.
+      Figure 9 – Real and approximated model showing change to Tcy with time inputting random number function.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      10
+      TASK C
+      DESIGN STABLE CONTROLLERS BASED ON YOUR APPROXIMATE
+      SYSTEM USING DIFFERENT TUNING METHODOLOGIES (YOU WILL
+      HAVE TO CONSULT THE LITERATURE FOR PART OF THIS TASK).
+      ZIEGLER-NICHOLS METHOD (PI & PID)
+      The Ziegler-Nichols tuning method is one of the oldest and most used methods for PID
+      parameter tuning, with methods being available for closed and open loop control (Amit and
+      Garg, 2015). Table 1 defines the Ziegler-Nichols tuning parameters (Noris, 2006).
+      Table 1 – Ziegler-Nichols tuning parameters.
+      𝑲𝒄 𝝉𝒊 𝝉𝑫
+      P
+      𝜏𝑝
+      𝐾𝑝𝑡𝑑
+      = 0.1803
+      PI 0.9𝜏𝑝
+      𝐾𝑝𝑡𝑑
+      = 0.1623 3.3𝑡𝑑 = 30.8979
+      PID 1.2𝜏𝑝
+      𝐾𝑝𝑡𝑑
+      = 0.2164 2𝑡𝑑 = 18.7260 0.5𝑡𝑑 = 4.6815
+      However, these values must be manipulated prior to inputting into Simulink. This is
+      described by the following Equations 15-17, with the results displayed in Table 2.
+      𝑃 = 𝐾𝑐
+      (15)
+      𝐼 =
+      𝐾𝑐
+      𝜏𝑖
+      (16)
+      𝐷 = 𝐾𝑐𝜏𝐷 (17)
+      Table 2 – Ziegler-Nichols Simulink coefficients.
+      𝑲𝒄 𝝉𝒊 𝝉𝑫
+      P 0.1803
+      PI 0.1623 0.0053
+      PID 0.2164 0.0115 1.0046
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      11
+      Using the Ziegler-Nichols PI and PID results and inputting this to Simulink for a step change
+      in the output Tcy from 988.1 K to 999.0 K for the real system, is highlighted in Figure 10. A
+      filter value of 1 is set for the PID controller. This is due to large values of N, this will ensure
+      that there is an ideal derivate term; however, an ideal derivative has a high gain, meaning noise
+      will generate large fluctuations in the control signal. To ensure this does not occur, N is set to
+      a low value chosen in this work to be 1.
+      Figure 10 – Ziegler-Nichols PI and PID controllers for a step change from 988.1 K to 999.0 K for the
+      approximate system.
+      Figure 10 highlights the effect of both the PI (blue) and PID (red) controllers, as well as
+      referencing the set-point (yellow). Both controllers are seen to have overshot the set-point of
+      999.0 K, prior oscillating around the value. Each oscillation, as time progresses, diminishes in
+      amplitude, until reaching steady state. It must be noted that there is still an element of white
+      noise affecting the system; therefore, reducing the ability of the controller to maintain an output
+      of 999.0 K after the step change.
+      For the PID controller, the system initially overshoots to an output value of 1007.0 K at
+      approximately 27 s; however, it responds quicker to the step change in comparison to the PI
+      controller, which only experiences an overshoot to the value of 1001.0 K at approximately 30
+      s. The time as to which both the PID and PI controller reached steady state were approximately
+      170 s and 140 s respectively.
+      In order to check the stability of the controllers, both were subjected to step changes of 1K,
+      2K, 5K, 10K and 20K. The results can be seen in Figures 11-12. With both controllers, as the
+      step change is increased, the overshoot of the set point also increases. Comparing the PI and
+      PID controllers it can be seen that the PID controller overshoots to a greater degree and also
+      experience a longer period of oscillations about the set point in comparison to the PI controllers,
+      with the PI controllers reaching steady state in a shorter amount of time.
+      In addition to this, further investigation was required to be carried out on the PID controller
+      with regards to the filter coefficient, N, that can be varied. It was prudent to carry out multiple 
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      12
+      simulations across a range of filter coefficient values to see if this effect corresponds with the
+      previously mentioned hypothesis regarding the differential aspect of the controller. Values of
+      N=1, 10 and 100 were chosen to be investigated. Figures 12-14 display the results of said
+      simulations.
+      Figure 11 – Ziegler-Nichols PI controller with step changes of +1 K, +2 K, +5 K, +10 K and +20 K.
+      Figure 12 – Ziegler-Nichols PID controller with step changes of +1 K, +2 K, +5 K, +10 K, + 20K and N=1.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      13
+      Figure 13 – Ziegler-Nichols PID controller with step changes of +1 K, +2 K, +5 K, +10 K, + 20K and N=10.
+      Figure 14 – Ziegler-Nichols PID controller with step changes of +1 K, +2 K, +5 K, +10 K, + 20K and N=100.
+      As the filter coefficient is increased, the following changes are identified:
+      • The amplitude of the oscillations dramatically increases about the set point.
+      • The number of oscillations increases with a simultaneous decrease in wavelength.
+      The changes displayed and identified highlight the effect that changing the filter value, N, has
+      on the system, with lower N values resulting in greater stability of the system due to the
+      decreased number and amplitude of oscillations; therefore, proving the aforementioned
+      predictions.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      14
+      COHEN-COON METHOD (PI & PID)
+      Similar to Ziegler-Nichols, Cohen-Coon developed a tuning method which is considered more
+      complex but there is a difference in the fact that the Cohen-Coon method provides a controller
+      with a faster rise time (Amit and Garg, 2015).
+      The values obtained during part A, are those described in Table 3.
+      Table 3 – Approximate first order transfer function parameters found in part A.
+      𝝉𝒑
+      𝒕𝒅 𝑲𝒑
+      18.237 9.363 10.8
+      These values were used with the equations found in Table 4 (Sen et al., 2014), as taken from
+      literature, with the resultant values displayed below, again Equations 15-17 are required prior
+      to inputting the data into Simulink.
+      Table 4 – Cohen-Coon tuning parameters.
+      Controller 𝑲𝒄 𝝉𝑰 𝝉𝑫
+      P
+      1
+      𝐾𝑝
+      𝜏𝑝
+      𝑡𝑑
+      (1 +
+      𝑡𝑑
+      3𝜏𝑝
+      ) - -
+      PI
+      1
+      𝐾𝑝
+      𝜏𝑝
+      𝑡𝑑
+      (0.9 +
+      𝑡𝑑
+      12𝜏𝑝
+      ) 𝑡𝑑
+      30 + 3 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      9 + 20 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      -
+      PID
+      1
+      𝐾𝑝
+      𝜏𝑝
+      𝑡𝑑
+      (
+      4
+      3
+      +
+      𝑡𝑑
+      4𝜏𝑝
+      ) 𝑡𝑑
+      32 + 6 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      13 + 8 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      𝑡𝑑
+      4
+      11 + 2 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      Tuning for the PI controller,
+      Proportional:
+      𝐾𝑐 =
+      1
+      𝐾𝑝
+      𝜏𝑝
+      𝑡𝑑
+      (0.9 +
+      𝑡𝑑
+      12𝜏𝑝
+      ) =
+      1
+      10.8
+      18.237
+      9.363 (0.9 +
+      9.363
+      12(18.237)
+      ) = 0.1700 (18)
+      𝑃 = 𝐾𝑐 = 0.1700 (19)
+      Integral:
+      𝜏𝐼 = 𝑡𝑑
+      30 + 3 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      9 + 20 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      = 9.363
+      30 + 3 (
+      9.363
+      18.237)
+      9 + 20 (
+      9.363
+      18.237)
+      = 15.3264 (20)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      15
+      𝐼 =
+      𝐾𝑐
+      𝜏𝐼
+      =
+      0.1700
+      15.3264 = 0.0111 (21)
+      Tuning for the PID controller
+      Proportional:
+      𝐾𝑐 =
+      1
+      𝐾𝑝
+      𝜏𝑝
+      𝑡𝑑
+      (
+      4
+      3
+      +
+      𝑡𝑑
+      4𝜏𝑝
+      ) =
+      1
+      10.8
+      18.237
+      9.363 (
+      4
+      3
+      +
+      9.363
+      4(18.237)
+      ) = 0.2636 (22)
+      𝑃 = 𝐾𝑐 = 0.2636 (23)
+      Integral:
+      𝜏𝐼 = 𝑡𝑑
+      32 + 6 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      13 + 8 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      = 9.363
+      32 + 6 (
+      9.363
+      18.237)
+      13 + 8 (
+      9.363
+      18.237)
+      = 19.2000 (24)
+      𝐼 =
+      𝐾𝑐
+      𝜏𝐼
+      =
+      0.2636
+      19.2000 = 0.0137 (25)
+      Derivative:
+      𝜏𝐷 = 𝑡𝑑
+      4
+      11 + 2 (
+      𝑡𝑑
+      𝜏𝑝
+      )
+      = 9.363
+      4
+      11 + 2 (
+      9.363
+      18.237)
+      = 3.1140 (26)
+      𝐷 = 𝐾𝑐𝜏𝐷 = 0.2636(3.1140) = 0.8209 (27)
+      Therefore, the controller settings for the PI and PID controller tuning as displayed in Table 5.
+      Table 5 – Cohen-Coon Simulink coefficients.
+      P I D
+      PI Controller 0.1700 0.0111 -
+      PID Controller 0.2636 0.0137 0.8209
+      These values were then inputted into Simulink in order to carry out analysis and comparisons
+      of the controller’s effect on the real system. The flowsheet of the Cohen-Coon model can be
+      seen in Figure 15.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      16
+      Figure 15 – Cohen-Coon Simulink flowsheet.
+      Figure 16 highlights the comparison between the PI and PID controllers, after using the CohenCoon model. A step change from 988.1 K to 999.0 K was tested, similar to what was previously
+      conducted for the Ziegler-Nicholas model. The figure highlights the greatest overshoot is for
+      the PID controller, achieving a value of 1009.0 K, with the PI controller only achieving a peak
+      overshoot of 1005.0 K. In addition to this, the PI controller converges at the steady state setpoint at a time of approximately 151 s; however, the PID controller achieves steady state at
+      approximately 200 s. Due to the reduced amplitude and oscillation around the set point, as well
+      as achieving steady state faster, the PI controller is presumed to be the optimal controller for
+      the Cohen-Coon model in comparison to the PID controller. This is a similar result to that
+      achieved after modelling from the Ziegler-Nicholas model; however, this will be discussed in
+      further detail later.
+      Figure 16 – Cohen-Coon PI and PID controllers with a step change from 988.1 K to 999.0 K.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      17
+      Secondly a test was conducted to see the response of the PI and PID controllers with varying
+      step changes of 1 K, 2 K, 5 K, 10 K and 20 K. This is depicted in Figures 17-18. It can be seen
+      that for both controllers, there is a subsequent increase in the overshoot with increasing step
+      change, with the largest overshoot for both controllers being exhibited in the 20 K step change.
+      As well as this, a longer time is required in order for the system operating with a PID controller
+      to achieve the steady state output for all step changes.
+      In conjunction with this, a test was conducted to understand the effect of the filter coefficient
+      on the response of the system output, for the PID controller. N was set as 1, 10 and 100 (similar
+      to the test conducted for the Ziegler-Nicholas method), with the noise within the system being
+      accounted for by the film coefficient. The results for this are highlighted by Figures 18-20.
+      Similarly, to the previous test for increasing the filter coefficient, it can be seen that the
+      oscillations decrease in wavelength and increase in amplitude; and therefore, this reduces the
+      stability of the system when using a PID controller, reaffirming the trend seen for ZieglerNichols and in theory.
+      Figure 17 – Cohen-Coon PI controller with step changes of +1 K, +2 K, +5 K, +10 K and +20 K.
+      Figure 18 - Cohen-Coon PID controller with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=1.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      18
+      Figure 19 - Cohen-Coon PID controller with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=10.
+      Figure 20 - Cohen-Coon PID controller with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=100.
+      INTERNAL MODEL CONTROL WITH DELAY APPROXIMATED BY 1 S T ORDER TAYLOR EXPANSION
+      Internal Model Control (IMC) is an amalgamation of a controller and of a simulation of a
+      process, the internal model. The internal model allows the computation of the difference
+      between the process output and of the internal model (Zhang, 2010). Using an internal model,
+      based on the process model, it is theoretically possible to attain perfect control of the system
+      (Mokhatab and Poe, 2012).
+      The delay for the process within the transfer function has previously been defined as an
+      exponential, highlighted in Equation 28.
+      𝐺𝑝
+      (𝑠) = 𝐺̃𝑝
+      (𝑠) =
+      𝐾𝑝
+      𝜏𝑝𝑠 + 1
+      𝑒
+      −𝑡𝑑𝑠
+      (28)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      19
+      However, using 1st order Taylor expansion, the delay can be approximated as described in
+      Equation xx. This is necessary in order to linearise the expression, allowing for the formation
+      of an IMC.
+      𝑒
+      −𝑡𝑑𝑠 ≈ 1 − 𝑡𝑑𝑠 (29)
+      Therefore, the transfer function can be represented as:
+      𝐺𝑝
+      (𝑠) = 𝐺̃𝑝
+      (𝑠) =
+      𝐾𝑝
+      𝜏𝑝𝑠 + 1
+      (1 − 𝑡𝑑𝑠) (30)
+      In order to develop the IMC with perfect representation, the inverse of the process transfer
+      function is developed, as highlighted by Equation 31.
+      𝐺𝑞
+      (𝑠) =
+      𝜏𝑝𝑠 + 1
+      𝐾𝑝(1 − 𝑡𝑑𝑠)
+      (31)
+      The denominator now contains one pole, which can be considered unstable. This is due to
+      the controller transfer function containing a positive, real pole; and therefore, this part must
+      be removed.
+      However, when removing this, the transfer function is no longer physically realisable, as the
+      order of the denominator is less than that of the numerator. In order for the controller to be
+      semi-proper, or proper, the denominator must be of equal or greater order than that of the
+      numerator. In order to solve this problem, a filter is added, ensuring the model is now
+      considered semi-proper. This is shown in Equation 32, with 𝜆 representing the filter tuning
+      parameter.
+      𝐺𝑞
+      (𝑠) =
+      𝜏𝑝𝑠 + 1
+      𝐾𝑝
+      (𝜆𝑠 + 1)
+      (32)
+      Finally, the expression for 𝐺𝑐
+      (𝑠) can be represented by Equation 33, leading to substitution
+      and re-arrangement to achieve the controllers transfer function.
+      𝐺𝑐
+      (𝑠) =
+      𝐺𝑞
+      1 − 𝐺𝑞𝐺̃𝑝
+      (33)
+      𝐺𝑐
+      (𝑠) =
+      (𝜏𝑝𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)
+      1 −
+      𝐾𝑝(1 − 𝑡𝑑𝑠)
+      (𝜏𝑝𝑠 + 1)
+      (𝜏𝑝𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)
+      =
+      (𝜏𝑝𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)
+      1 −
+      (1 − 𝑡𝑑𝑠)
+      (𝜆𝑠 + 1)
+      (34)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      20
+      Equation 34 shows the substitution of both 𝐺𝑞
+      (𝑠) and 𝐺̃𝑝(𝑠) into Equation 33. The
+      denominator of Equation 34 then needs to be homogenised to simplify the transfer function
+      further.
+      𝐺𝑐
+      (𝑠) =
+      (𝜏𝑝𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)
+      (𝜆𝑠 + 1)
+      (𝜆𝑠 + 1)
+      −
+      (1 − 𝑡𝑑𝑠)
+      (𝜆𝑠 + 1)
+      =
+      (𝜏𝑝𝑠 + 1)
+      𝐾𝑝(𝜆𝑠 + 𝑡𝑑𝑠 + 1 − 1)
+      (35)
+      Therefore 𝐺𝑐
+      (𝑠) can finally be represented as:
+      𝐺𝑐
+      (𝑠) =
+      𝜏𝑝𝑠
+      𝐾𝑝𝑠(𝜆 + 𝑡𝑑)
+      +
+      1
+      𝐾𝑝𝑠(𝜆 + 𝑡𝑑)
+      (36)
+      The transfer function for the controller is shown in two distinct parts, with the first
+      representing the proportional aspect of the controller, and the second representing the
+      integral. Using this, 𝐾𝑐 can be determined, as shown in Equation 37.
+      𝐾𝑐 =
+      𝜏𝑝
+      𝐾𝑝(𝜆 + 𝑡𝑑)
+      (37)
+      Subsequently, 𝜏𝑖 can be calculated through re-arranging Equation 38, as depicted in Equation
+      39.
+      𝐾𝑐
+      𝜏𝑖𝑠
+      =
+      𝜏𝑝
+      𝐾𝑝(𝜆 + 𝑡𝑑)𝑠
+      (38)
+      𝜏𝑖 = 𝐾𝑐𝐾𝑝(𝜆 + 𝑡𝑑) (39)
+      With the value of 𝜏𝑖
+      , 𝜆 and 𝐾𝑐 all being unknown, the substitution of Equation 37 is needed
+      into Equation 38 in order to remove 𝜆. This is represented by Equation 40.
+      𝜏𝑖 =
+      𝜏𝑝𝐾𝑝(𝜆 + 𝑡𝑑)
+      𝐾𝑝(𝜆 + 𝑡𝑑)
+      = 𝜏𝑝 (40)
+      With 𝐾𝑐 equal to the proportional aspect, and Equation 41 equal to the integral aspect,
+      neither can be calculated without first determining the optimum value for 𝜆.
+      𝐼 =
+      𝐾𝑐
+      𝜏𝑖
+      (41)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      21
+      Table 6 – IMC (delay approximated by Taylor) tuning parameters and Simulink coefficients.
+      Table 6 shows the three values for 𝜆 that were considered (5, 10, 15) and the proportional
+      and integral controller parameters were calculated and set within Simulink, to achieve a setpoint of 999.0 K. These values were selected because, for an ideal controller, the value of 𝜆
+      must be less than the process time for the controller to respond quicker. The results obtained
+      for each of these 𝜆 values is depicted in Figure 21. For a 𝜆 value of 5, the system overshoots
+      the desired set-point, whilst the response for a 𝜆 of 15 can be considered overdamped.
+      Despite still having a small overshoot, the 𝜆 of 10 can be considered the optimum and will be
+      considered for the remainder of this section.
+      Figure 21 – IMC (delay approximated by Taylor) with filter coefficient values, N, of 5, 10 and 15.
+      After determining the value of 𝜆, consideration into the effectiveness of using the IMC model
+      can be conducted. Firstly, the flowsheet described in Figure 22 was set prior to analysis.
+      λ Kc τi P I
+      5 0.118 18.273 0.118 0.006
+      10 0.087 18.273 0.087 0.005
+      15 0.069 18.273 0.069 0.004
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      22
+      Figure 22 – IMC (delay approximated by Taylor) flowsheet.
+      Repeating the control loop highlighted in Figure 23, the response to a variety of step changes
+      could be observed for the derived PI controller. The step changes that were tested include 1
+      K, 2 K, 5 K, 10 K and 20 K. As the step change is increased, the overshoot of the systems output
+      also increases.
+      Figure 23 – IMC PI controller (Taylor) with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=100.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      23
+      INTERNAL MODEL CONTROL WITH DELAY APPROXIMATED BY PADE
+      The perfect controller is mathematically attainable through design based upon the inverse of
+      the process; however, perfect control is unattainable in practicable applications due to
+      constraints that will be outlined below.
+      The process transfer function is described by Equation 42.
+      𝐺𝑝
+      (𝑠) = 𝐺̃𝑝
+      (𝑠) =
+      𝐾𝑝
+      𝜏𝑝𝑠 + 1
+      𝑒
+      −𝑡𝑑𝑠
+      (42)
+      Where the delay of the process is represented by the exponential term. In order to simplify this
+      exponential factor, the Pade approximation may be used, shown by Equation 43.
+      𝑒
+      −𝑡𝑑𝑠 ≈
+      −0.5𝑡𝑑𝑠 + 1
+      0.5𝑡𝑑𝑠 + 1
+      (43)
+      Substituting this value into Equation 44, the process transfer function becomes:
+      𝐺𝑝
+      (𝑠) = 𝐺̃𝑝
+      (𝑠) =
+      𝐾𝑝
+      𝜏𝑝𝑠 + 1
+      −0.5𝑡𝑑𝑠 + 1
+      0.5𝑡𝑑𝑠 + 1
+      (44)
+      As described a perfect controller could be produced in theory through use of the inverse of the
+      process.
+      𝐺𝑞
+      (𝑠) =
+      1
+      𝐺̃𝑝
+      (𝑠)
+      =
+      (𝜏𝑝𝑠 + 1)(0.5𝑡𝑑𝑠 + 1)
+      𝐾𝑝(−0.5𝑡𝑑𝑠 + 1)
+      (45)
+      The first constraint is highlighted above, with a positive pole being present in the denominator.
+      The presence of just one positive pole leads to a destabilised system and, therefore, action must
+      be taken. As the designer of the controller, it is within our power to remove this positive pole
+      from the equation entirely. This is provided that the remaining equation has a denominator
+      polynomial in the controller, of which the order is higher than or equal to that of the numerator.
+      The method of enabling this to be the case is through the addition of one or multiple filters
+      depending on the process, as shown in Equation, into the controller. The filter tuning parameter
+      is given as 𝜆 and is described in Equation 46.
+      𝑓(𝑠) =
+      1
+      𝜆𝑠 + 1
+      (46)
+      Analysing Equation 45, it is seen that the numerator is second order and the denominator,
+      following the removal of the positive pole, is zero order. Therefore, to make the denominator 
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      24
+      at least of equal order, two filters must be added. The resultant controller is shown in Equation
+      47.
+      𝐺𝑞
+      (𝑠) =
+      (𝜏𝑝𝑠 + 1)(0.5𝑡𝑑𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)(𝜆𝑠 + 1)
+      (47)
+      Finally, the equation for the controller transfer function is given in Equation 48.
+      𝐺𝑐
+      (𝑠) =
+      𝐺𝑞
+      1 − 𝐺̃𝑝𝐺𝑞
+      (48)
+      Substituting the previously derived equations for 𝐺𝑝
+      (𝑠) and 𝐺𝑞
+      (𝑠) into Equation 48 yields
+      Equation 49.
+      𝐺𝑐
+      (𝑠) =
+      (𝜏𝑝𝑠 + 1)(0.5𝑡𝑑𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)(𝜆𝑠 + 1)
+      1 −
+      𝐾𝑝
+      𝜏𝑝𝑠 + 1
+      −0.5𝑡𝑑𝑠 + 1
+      0.5𝑡𝑑𝑠 + 1
+      .
+      (𝜏𝑝𝑠 + 1)(0.5𝑡𝑑𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)(𝜆𝑠 + 1)
+      (49)
+      Homogenising the denominator produces Equation 50.
+      𝐺𝑐
+      (𝑠) =
+      (𝜏𝑝𝑠 + 1)(0.5𝑡𝑑𝑠 + 1)
+      𝐾𝑝
+      (𝜆𝑠 + 1)(𝜆𝑠 + 1)
+      (𝜆𝑠 + 1)(𝜆𝑠 + 1) − (0.5𝑡𝑑𝑠 + 1)
+      (𝜆𝑠 + 1)(𝜆𝑠 + 1)
+      =
+      (𝜏𝑝𝑠 + 1)(0.5𝑡𝑑𝑠 + 1)
+      𝐾𝑝(𝜆
+      2𝑠
+      2 + 2𝜆𝑠 + 1 + 0.5𝑡𝑑𝑠 − 1)
+      (50)
+      Simplifying Equation 50 and expanding the bracket leads to Equation 51.
+      𝐺𝑐
+      (𝑠) =
+      0.5𝑡𝑑𝜏𝑝𝑠
+      2 + (𝜏𝑝 + 0.5𝑡𝑑)𝑠 + 1
+      𝐾𝑝
+      (𝜆
+      2𝑠 + 2𝜆 + 0.5𝑡𝑑
+      )𝑠
+      (51)
+      Finally, the controller transfer function can be represented by Equation 52.
+      𝐺𝑐
+      (𝑠) =
+      0.5𝑡𝑑𝜏𝑝𝑠
+      2 + (𝜏𝑝 + 0.5𝑡𝑑)𝑠 + 1
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )𝑠 (
+      𝜆
+      2
+      2𝜆 + 0.5𝑡𝑑
+      𝑠 + 1)
+      (52)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      25
+      From Equation 52 the expressions 𝐾𝑐
+      , 𝜏𝐼 and 𝜏𝐷 can be obtained. This is done through the
+      removal of the filter term, shown in Equation 53, separation of the fraction.
+      𝐹𝑖𝑙𝑡𝑒𝑟 𝑇𝑒𝑟𝑚 = (
+      𝜆
+      2
+      2𝜆 + 0.5𝑡𝑑
+      𝑠 + 1) (53)
+      Which leads to the values of 𝐾𝑐
+      , 𝜏𝐼 and 𝜏𝐷 as shown in Equations 54 and 55.
+      𝐾𝑐 =
+      (𝜏𝑝 + 0.5𝑡𝑑)
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      (54)
+      𝐾𝑐
+      𝜏𝐼𝑠
+      =
+      1
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )𝑠
+      (55)
+      Therefore:
+      𝜏𝐼 = 𝐾𝑐𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      ) =
+      (𝜏𝑝 + 0.5𝑡𝑑)
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      ) = 𝜏𝑝 + 0.5𝑡𝑑
+      (56)
+      𝜏𝐼 = 𝐾𝑐𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      ) =
+      (𝜏𝑝 + 0.5𝑡𝑑)
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      ) = 𝜏𝑝 + 0.5𝑡𝑑
+      (57)
+      𝐾𝑐𝜏𝐷𝑠 =
+      0.5𝑡𝑑𝜏𝑝𝑠
+      2
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )𝑠
+      (58)
+      Therefore.
+      𝜏𝐷 =
+      0.5𝑡𝑑𝜏𝑝
+      𝐾𝑝𝐾𝑐
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      (59)
+      𝜏𝐷 =
+      0.5𝑡𝑑𝜏𝑝
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      .
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      (𝜏𝑝 + 0.5𝑡𝑑)
+      =
+      0.5𝑡𝑑𝜏𝑝
+      (𝜏𝑝 + 0.5𝑡𝑑)
+      (60)
+      The P, I, D aspects of the controller are calculated through the use of Equations 61-63.
+      𝑃 = 𝐾𝑐 =
+      (𝜏𝑝 + 0.5𝑡𝑑)
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      (61)
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      26
+      𝐼 =
+      𝐾𝑐
+      𝜏𝐼
+      =
+      1
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      (62)
+      𝐷 = 𝐾𝑐𝜏𝐷 =
+      0.5𝑡𝑑𝜏𝑝
+      𝐾𝑝
+      (2𝜆 + 0.5𝑡𝑑
+      )
+      (63)
+      It can be seen that each of these functions depend upon the filter tuning parameter, 𝜆, which is
+      currently unknown. Therefore, several values of 𝜆 were inputted into Equation 53 and
+      Equations 61-63 and across various simulations, with the results analysed to determine the
+      correct value of 𝜆. Again, these values of 𝜆 were chosen to be less than the process time for
+      the reasons aforementioned. Table 7 shows the values inputted into Simulink when varying
+      the 𝜆 value, with Figure 24 denoting the system output response for each controller with a
+      varying 𝜆 value and a constant filter coefficient of 1. For a 𝜆 of 5, the response is seen to be
+      underdamped, with a quicker initial response but with a degree of overshoot. There is also a
+      degree of oscillation, prior to reaching steady state, a distinct feature of an underdamped
+      system. Therefore, the optimal 𝜆 value is seen to be a value of 10, reaching steady state faster
+      than that for a value of 15, as well as attaining no overshoot. Consequently a 𝜆 value of 10 was
+      used for the remainder of the analysis of the IMC (Pade) controller.
+      Table 7 – IMC (delay approximated by Pade) Simulink and filter coefficients for a range of filter tuning
+      parameter values.
+      λ P I D Filter 𝝉𝒑
+      5 0.1445 0.0063 0.5384 1.7028
+      10 0.086 0.0038 0.3203 4.0516
+      15 0.0612 0.0027 0.2279 6.4876
+      Figure 24 - IMC (delay approximated by Pade) with 𝜆 values of 5, 10 and 15.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      27
+      Similar to the studies conducted previously, the system response for a system including an
+      IMC controller with delay approximated by Pade, was tested for different step changes,
+      ranging from 1 K, 2 K, 5 K, 10 K and 20 K. This is depicted in Figures 25a, Figures 25b and
+      Figures 25c, showing the change in response for varying filter values: 1, 10 and 100.
+      Firstly, it can be seen that as the step change is increased, there is little difference in the
+      response of the system prior to achieving steady state after the step change, with the time
+      taken to achieve steady state remaining approximately constant, as well as seeing little to no
+      oscillation in the system response for the IMC controller.
+      Secondly, as the filter coefficient, N is increased from 1 to 100, there is also little change in
+      response, with only the larger step changes seeing some degree of oscillation prior to
+      achieving steady state; however, there is no overshoot of the set-point for this IMC controller.
+      Figure 25a - IMC PI controller (Pade) with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=1 .
+      Figure 25b - IMC PI controller (Pade) with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=10 .
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      28
+      Figure 25c - IMC PI controller (Pade) with step changes of +1 K, +2 K, +5 K, +10 K, +20 K and N=100.
+      SUMMARY
+      In conclusion, Figure 26 shows the system response for each of the four methods used for a
+      step change from 998.1 K to 999.0 K at t=0, with the best controller chosen for both the
+      Cohen-Coon and Ziegler-Nichols methods (PI Controllers). For the PID controller described for
+      the IMC Pade method, a filter coefficient of 1 was used, despite the result varying minimally
+      when the filter coefficient was changed between 1 and 100. It can be seen from Figure 26,
+      that both the Ziegler- Nichols and Cohen-Coon methods have the largest overshoots, with
+      both appearing to possess the largest degree of oscillation around the set-point as well.
+      Choosing between these two controllers, it is apparent that the Ziegler-Nichols PI controller
+      is the best, due to it possessing an overshoot approximately 4 K lesser than the Cohen-Coon
+      PI controller, as well as achieving steady state after less time.
+      However, neither of these controllers compare to the two IMC controllers. Despite the IMC
+      Taylor PI controller showing some degree of overshoot, it is significantly less than that for the
+      Ziegler-Nichols and Cohen-Coon PI controllers. When comparing the two IMC methods, it can
+      be seen that the Pade controller is the optimal, as despite both achieving steady state at
+      approximately the same time, the Pade controller possesses no overshoot.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      29
+      Figure 26 – Response in Tcy for each of the controllers with a step change from 998.1 K and 999.0 K when N=1.
+      TASK D
+      EXPLAIN CLEARLY WHICH UNITS OF YOUR BLOCK USE DEVIATION VARIABLES AS INPUTS AND
+      OUTPUTS AND WHICH REAL VARIABLES, BY USING APPROPRIATE DIAGRAMS.
+      Within a process, values fluctuate about a set-point value across a period of time. In order to
+      ensure that the set-point is maintained, it must be guaranteed that the fluctuations about the setpoint are compensated and accounted for. It requires less computation to calculate the change
+      required to maintain the set-point rather than tracking the total value of the variable. Therefore,
+      during control of systems, it is typical to convert variables to deviation variables (also referred
+      to as perturbation variables), observing the difference between the current actual value and that
+      of the steady state set point value. Prior to this conversion the variables are defined as real
+      process variables. Equation 64 depicts the previously stated point and defines the deviation
+      variable.
+      𝑦
+      ′
+      (𝑡) = 𝑦(𝑡) − 𝑦𝑠
+      (0) (64)
+      Where 𝑦′(𝑡) represents the deviation variable, 𝑦(𝑡) represents the variables actual value at
+      time t and 𝑦𝑠
+      (0) represents the steady state value at time 0. A transformation of variables into
+      deviation variables is a necessity when converting from time domain to the Laplace domain.
+      This greatly simplifies process control, with a deviation value of 0 desired as this shows that
+      there is no deviation about the set-point.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      30
+      Figure 27 – PID controller for the approximate model; pink represents deviation variables and blue represents
+      real variables.
+      Figure 27 depicts the approximated system highlighting the deviation variables (magenta) and
+      the real variables (blue). In Figure 28, Fa and Fs are the real measurable inputs with Tcy, T1
+      and Trg the measurable outputs also considered to be real. The Laplace transfer function is used
+      to link the input Fa to the output Tcy with deviation variables.
+      Figure 28 – PID controller for real system; pink represents deviation variables and blue represents real
+      variables.
+      For the simulation of the FCCU, deviation forms of the regenerator air rate and regenerator gas
+      cyclone temperature are formed as shown in Equations 65 and 66 respectively.
+      𝐹𝑎
+      ′ = 𝐹𝑎 − 𝐹𝑎𝑠 (65)
+      𝑇𝑐𝑦
+      ′ = 𝑇𝑐𝑦 − 𝑇𝑐𝑦𝑠 (66)
+      The difference between the real and desired Tcy is calculated by the comparator, the result of
+      which is called the error, also a deviation variable, and this is sent to the controller. Dependent
+      upon the value received, the controller can make a decision of whether to manipulate the value
+      of Fa. The constant initial value of Fa, set as 25.35 kg s-1, which is received by the comparator
+      is a real value; however, the input from the controller is a deviation variable. The two values
+      are summed together to produce a new Fa value, a real variable, which is then used to produce
+      the desired output, also all real.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      31
+      TASK E
+      CHOOSE YOUR TWO BEST CONTROLLERS. EXPLAIN WHY THEY ARE THE BEST. FOR
+      THE CLOSED-LOOP SIMULATION OF THE REAL SYSTEM WITH THESE BEST
+      CONTROLLERS, PLOT THE INPUTS AS WELL AS TRG AS A FUNCTION OF TIME. DO
+      YOU THINK THE VALUES OF THE INPUTS AND OF TRG ARE PHYSICAL/REALISTIC?
+      IF THEY ARE NOT YOU NEED TO RETUNE YOUR CONTROLLERS SO THAT THEY
+      PRODUCE REALISTIC OUTPUTS. CLEARLY JUSTIFY YOUR WORK AND ANSWERS.
+      As aforementioned, the two best controllers designed during Task C, for a closed loop system,
+      were the IMC Controllers with the delay approximated using the Taylor expansion and Pade
+      methods. This was due to the Ziegler-Nicholas and Cohen-Coon PI and PID controllers both
+      showing a large overshoot in their initial responses, as well as achieving steady state slower
+      than the IMC controllers. In addition to this, when using a PID controller, the response was
+      greatly affected by the filter coefficient – as the coefficient was increased, the wavelength and
+      amplitude of the oscillations increased around the set-point, reducing system stability. This was
+      not the case with the IMC controllers, with both showing little variation with increasing filter
+      coefficient.
+      For analysis of the IMC Controller with delay approximated by Taylor expansion, the step
+      change chosen for this simulation was 20 K, occurring at a time of 10 seconds, setting an initial
+      temperature of Tcy as 988.1 K with a final output of 1008.1 K, with both the IMC controllers
+      with delays approximated by Taylor expansion and Pade modelled for their inputs; step change
+      of Tcy, Fa and Fs, and outputs; Tcy and Trg. Further to this the error for each of the controllers
+      was also modelled. The inputs and outputs to the system are shown in Figures 29 and 30, on
+      different graphs, such that the y-axis is correctly scaled to read the results.
+      Figure 29 – Inputs to the system using IMC (Taylor) with a step change from 998.1 K to 1008.1 K.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      32
+      The step change in the output Tcy is from 998.1 to 1008.1, a 20 K increase. The output for Tcy
+      in Figure 30 shows this, with a slight overshoot of approximately 1 K before achieving steady
+      state after approximately 81 s. As the temperature of Tcy tends toward steady state after the step
+      change, there is a decrease in the error, labelled in Figure 29. This is due to a slight increase
+      in Fa (the hot air flowrate) ensuring that the temperature the regenerator can increase.
+      Subsequently, this causes an increase in Trg, highlighted in Figure 30 – a larger increase
+      occurring in Trg in comparison to Tcy.
+      However, the increasing temperatures within the regenerator also cause an increase in the
+      temperature in the reactor, as T1 increases from a value of 776.7 K prior to the step change to
+      796.8 K after the step change; however, there is no effect to the input Fs, as it maintains a value
+      of 294 kg s-1
+      Figure 30 – Outputs to the system using IMC (Pade) with a step change from 998.1 K to 1008.1 K.
+      Similarly, the analysis was conducted for the IMC controller with delay approximated by the
+      Pade method. The same step change of 20 K was chosen, with the change occurring at 10 s to
+      test the effect of changing Tcy on the other inputs and outputs. The results are shown in Figure
+      31 for inputs and Figure 32 for outputs.
+      The same trend as for the Taylor expansion PI controller is seen in this scenario, with all three
+      outputs seeing an increase in temperature, after the 20 K step change in Tcy. The input Fa is
+      increased to facilitate this increase in Tcy; however, the PID controller ensures there is an
+      overshoot of hot air flowrate into the system, as depicted in Figure 31. This did not occur in
+      the prior case, as instead there was an overshoot in the output Tcy. In addition to this, the time
+      taken to reach steady state for Tcy after the step change is decreased for the PID controller to
+      approximately 71 s – a quicker response using the Pade PID controller than the PI Taylor
+      controller. Finally, similar to the previous case, there is an increase in the temperature T1, with
+      no increase or decrease in the Fs input.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      33
+      Figure 31 - Inputs to the system using IMC (Pade) with a step change from 998.1 K to 1008.1 K.
+      Figure 32 - Outputs to the system using IMC (Pade) with a step change from 998.1 K to 1008.1 K.
+      These results can be considered realistic for the two IMC controllers. In theory, in a FCCU the
+      regenerator gas temperature is greater than the bed temperature. This is due to a temperature
+      variation existing in the vertical section of the regenerator vessel. The highest and lowest values
+      of these temperatures can be found at the flue gas line and the regenerator bed respectively.
+      Therefore, Tcy is greater than or equal to Trg.
+      TASK F
+      FOR THE BEST TWO CONTROLLERS YOU HAVE DESIGNED YOU NEED TO FIND:
+      I. WHAT IS THE RANGE OF SET-POINTS THAT YOUR CONTROLLER CAN BE TRUSTED,
+      I.E. ALL INPUTS AND OUTPUTS REMAIN REALISTIC AND THE SET -POINT IS
+      SATISFIED?
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      34
+      The limiting set points of the controller are determined by the physical limitations of the
+      system, in terms of equipment capacity, and flowrates not being able to attain negative values.
+      For example, the IMC controllers are limited by the inability for the hot air flowrate to go
+      below zero; and therefore, there will be a minimum achievable temperature that this controller
+      can realise.
+      In order to attain the maximum value for the IMC Controller with delay approximated by
+      Taylor expansion, a step change from 988.1 K to 1500 K was induced at a time of 10 s (this
+      value could be increased if the Tcy temperature was able to attain this set-point and achieve
+      steady state). The result for this is described in Figure 33 and Figure 34 showing the inputs
+      and outputs respectively.
+      Figure 33 – Inputs to system using IMC (Taylor) with a step change from 988.1 K to 1500.0 K at a time of
+      t=10s.
+      As the temperature Tcy increases, to meet the new set-point, the input Fa increases, meaning a
+      larger flow of hot air enters the regenerator to increase both Tcy and Trg. Despite the flowrate
+      of hot air increasing beyond 1000 kg s-1, the temperature Tcy is maximised at a value of 1206
+      K. Additionally, the temperature Trg also increases, surpassing Tcy and maximising at a value
+      of 1363 K after approximately 300 s.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      35
+      Figure 34 - Outputs to system using IMC (Taylor) with a step change from 988.1 K to 1500.0 K at a time of
+      t=10s.
+      Equally, the minimum temperature for Tcy for this controller can be determined, through
+      decreasing the set-point until Fa equates to 0 kg s-1. Any value beyond this will be negative
+      flow and this is not physically possible, as aforementioned. The results of this study are shown
+      in Figures 35 and 36 for both the inputs and outputs respectively.
+      The set-point at which the flowrate of hot air equates to zero; and consequently, the minimum
+      attainable temperature of Tcy is found to be 803.2 K. This is represented in Figure 35 for inputs
+      and Figure 36 for outputs, with Figure 37 showing clearly that the value for input Fa does not
+      reduce below 0.
+      Figure 35 - Inputs to system using IMC (Taylor) with a step change from 988.1 K to 803.2 K at a time of t=10s.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      36
+      Figure 36 - Outputs to system using IMC (Taylor) with a step change from 988.1 K to 803.2 K at a time of
+      t=10s.
+      Figure 37 – Magnified input data showing Fa does not fall below zero.
+      This analysis is conducted in the same manner for the IMC controller with delay approximated
+      using the Pade method; and therefore, the minimum and maximum temperatures achieved were
+      778.0 and 1206.0 K. This is similarly shown in Figures 38-41.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      37
+      Fi gurFigure 38 - Inputs to system using IMC (Pade) with a step change from 988.1 K to 1500.0 K at a time of t=10s.
+      Fi gurFigure 39 - Inputs to system using IMC (Pade) with a step change from 988.1 K to 1500.0 K at a time of t=10s.
+      Figure 40 - Inputs to system using IMC (Pade) with a step change from 988.1 K to 778.0 K at a time of t=10s.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      38
+      Figure 41 - Outputs to system using IMC (Pade) with a step change from 988.1 K to 778.0 K at a time of t=10s.
+      II. FOR THE NOMINAL SET-POINT, WHAT IS THE RANGE OF INPUT DISTURBANCES THAT
+      YOUR CONTROLLER CAN REJECT, WHILE ALL INPUTS AND OUTPUTS REMAIN
+      REALISTIC? CLEARLY JUSTIFY ALL YOUR ANSWERS.
+      An initial test was set up to understand the effect of disturbances on the cyclone temperature,
+      Tcy when set at a value of 988.1 K with no step change. The input used to create the disturbance
+      was the ‘band limited white noise’ set for values of 1, 5, 10, 25, 50 and 100 for both the PI
+      (Taylor) and PID (Pade) controllers. It must be noted the PID controller was set with a filter
+      coefficient value of 1. The results for this are shown in Figures 42-47.
+      Figure 42 – PI and PID controller output responses for Tcy and set point 988.1 K for a noise power of 1.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      39
+      Figure 43 – PI and PID controller output responses for Tcy and set point 988.1 K for a noise power of 5.
+      Figure 44 – PI and PID controller output responses for Tcy and set point 988.1 K for a noise power of 10.
+      Figure 45 – PI and PID controller output responses for Tcy and set point 988.1 K for a noise power of 25.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      40
+      Figure 46 – PI and PID controller output responses for Tcy and set point 988.1 K for a noise power of 50.
+      Figure 47 – PI and PID controller output responses for Tcy and set point 988.1 K for a noise power of 50.
+      In summary, the results for increasing the noise power and the resulting effect on Tcy can be
+      summarised by Table 8.
+      Table 8 – Oscillations and deviation for Tcy from set point when varying the noise power.
+      Noise
+      Power
+      Oscillation Due to
+      Noise Around SetPoint 988.1 K
+      % Deviation
+      From SetPoint
+      1 ±0.6 K 0.06%
+      5 ±0.8 K 0.08%
+      10 ±1.0 K 0.10%
+      25 ±1.4 K 0.14%
+      50 ±1.6 K 0.16%
+      100 ±2.5 K 0.25%
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      41
+      As the noise power increases, so did the amplitude of the oscillations around the set-point:
+      however, despite seeing this increase in % deviation from the set-point, a noise power of 100
+      only has a deviation of 0.25 % - a minimal value.
+      In addition to this, the effect of increasing noise power can be examined for the output Fs. For
+      a constant Fs at a set-point of 294 kg s-1, the results can be seen in Figures 48-53. It can be
+      seen that as the noise power increases from a factor of 1 to a factor of 100, the oscillations
+      increase from ± 11 kg s-1 to ± 121 kg s-1. Even considering these fluctuations, the values
+      produced are still physically possible, with Fs all being a positive value. However; in reality
+      operations exhibiting such fluctuations would not be feasible. A pump would not be able to
+      sustain operation with such rapid deviations; a typical pump would alter the flow passing
+      through it through the use of a VSD, requiring a large heat sink for excess energy, and as such
+      the rapid deviations could lead to overheating and subsequent maintenance issues (Brumbach
+      and Clade, 2017).
+      Figure 48 – Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 1.
+      Figure 49 – Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 5.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      42
+      Figure 50 – Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 10.
+      Figure 51 – Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 25.
+      Figure 52 – Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 50.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      43
+      Figure 53 – Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 100.
+      Table 9 – Oscillations and deviation for Fs from set point when varying the noise power.
+      Noise
+      Power
+      Oscillation Due to
+      Noise Around SetPoin 294 kg s-1
+      % Deviation
+      From SetPoint
+      1 ± 11 3.74%
+      5 ± 27 9.18%
+      10 ± 39 13.27%
+      25 ± 63 21.43%
+      50 ± 87 29.59%
+      100 ± 121 41.16%
+      The noise power was increased to the point at which the result is no longer physically feasible
+      as the flowrate drops below zero. This is highlighted in Figure 54 for a noise power of 657.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      44
+      Figure 54 - Changing response of input Fs, for a set-point of 294 kg s-1, with noise factor of 657.
+      Similar to the work previously done to Fs, a noise block was introduced to understand the effect
+      of the disturbance of Fa, at a set-point value of 988.1 K. The flowsheet for this is described in
+      Figure 55.
+      Figure 55 – Flowsheet used for varying noise input of Fa.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      45
+      When noise is introduced to the input Fa, the noise cannot be increased above 5, due to the
+      input decreasing below a flowrate of 0. This result is shown in Figure 56, as well as showing
+      the response for a noise power of 1 in Figure 57.
+      Figure 56 - Changing response of input Fa, for a set-point of 25.35 kg s-1, with noise factor of 5.
+      Figure 57 - Changing response of input Fa, for a set-point of 25.35 kg s-1, with noise factor of 1.
+      The resulting effect on the outputs Tcy and Trg for a noise factor of 5, at a set-point value for Fa
+      of 25.35 kg s-1. This was conducted for both the PI and PID IMC controllers and is described
+      in Figure 58.
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      46
+      Figure 57 - Changing response output Tcy and Trg for PI and PID IMC controllers with a noise factor of 5.
+      NOMENCLATURE
+      Symbol Definition Units
+      𝑭𝒔 Catalyst Recycle Rate 𝑘𝑔 𝑠
+      −1
+      𝐹𝑎 Regenerator Air Rate 𝑘𝑔 𝑠
+      −1
+      𝑇𝑐𝑦 Gas Cyclone Temperature K
+      𝑇𝑟𝑔 Regenerator Bed Temperature K
+      𝑇1 Riser Outlet Temperature K
+      𝜏 Process Time Constant s
+      𝐾𝑝 Steady State Gain Dimensionless
+      𝑡𝑑 Time delay S
+      𝐾𝑐 Controller Gain Dimensionless
+      𝐺𝑝 Process Transfer Function Dimensionless
+      𝐺𝑐 Controller Transfer Function Dimensionless
+      𝜆 Filter Parameter Dimensionless
+      N Filter Coefficient Dimensionless
+      Adam Bradford-Timlin: 9933571 Louis Brackenbury: 9931733
+      47
+      BIBLIOGRAPHY
+      Amit, K. and Garg, K. . (2015) ‘Comparison of Ziegler-Nichols , Cohen-Coon and Fuzzy Logic Controllers for Heat
+      Exchanger Model’, International Journal of Science, Engineering and Technology Research (IJSETR), 4(6), pp.
+      1917–1920.
+      Brumbach, M. and Clade, J. (2017) Electronic Variable Speed Drives. 4th Editio. Boston: Cengage Learning.
+      Mokhatab, S. and Poe, W. A. (2012) ‘Process Control Fundamentals’, Handbook of Natural Gas Transmission
+      and Processing, pp. 473–509. doi: 10.1016/b978-0-12-386914-2.00014-5.
+      Noris, F. B. M. (2006) Comparison Between Ziegler-Nichols and Cohen-Coon Method for Controller Tunings.
+      University College of Engineering & Technology Malaysia.
+      Sen, Rajat et al. (2014) ‘Comparison Between Three Tuning Methods of PID Control for High Precision
+      Positioning Stage’, Mapan - Journal of Metrology Society of India, 30(1), pp. 65–70. doi: 10.1007/s12647-014-
+      0123-z.
+      Smith, R. S. (1995) ‘Model validation for robust control: an experimental process control application’,
+      Automatica, 31(11), pp. 1637–1647. doi: 10.1016/0005-1098(95)00093-C.
+      Zhang, P. (2010) Industrial control system simulation routines. First Edit, Advanced Industrial Control
+      Technology. First Edit. Peng Zhang. doi: 10.1016/b978-1-4377-7807-6.10019-1.
+    </div>
+  </div>	
+  </div>
+  
+  <div class="rightcol">
+  	<div class="panel">
+  		<div class="title"><h1>Lorem ipsum <br /> Nulla varius libero</h1></div>
+    	<div class="content">
+        	<div class="icon"><img src="images/icon5.png" alt="icon" /></div>
+            <spna>Fusce commodo </spna>
+            <p>Mauris quis dolor posuere id mattis sapien gravida</p>
+        </div>
+        <div class="content marTop40">
+        	<div class="icon"><img src="images/icon5.png" alt="icon" /></div>
+            <spna>Donec lacinia </spna>
+            <p>Curabitur vel magna arcu uno hendrerit consequat odio</p>
+        </div>
+        <div class="content marTop40">
+        	<div class="icon"><img src="images/icon5.png" alt="icon" /></div>
+            <spna>Vestibulum aliquam</spna>
+            <p>Vestibulum fringilla nisl sit amet metus tristique</p>
+            <div class="button marTop30"><a href="#">More Info</a></div>
+        </div>
+    </div>
+  	<div class="panel marTop40">
+  		<div class="title"><h1>Nulla facilisi<br />Suspendisse aliquet</h1></div>
+    	<div class="content">
+        	<p>Mauris ornare eros in purus cursus molliam nec gravida magna.</p>
+            <ul>
+            	<li><a href="#">- Lorem ipsum dolor sit amet, consect</a></li>
+                <li><a href="#">- Duis varius lectus at nunc dignissim tin</a></li>
+                <li><a href="#">- Morbi ac mauris lacus, ac mol</a></li>
+                <li><a href="#">- Etiam sollicitudin nisi a leo porta</a></li>
+                <li class="bg-bottom"><a href="#">- Pellen sepien gravids loreet ornare</a></li>
+            </ul>
+            <div class="button marTop30"><a href="#">More Info</a></div>
+        </div>
+    </div>
+  </div>  
+    
+  <div class="clearing"></div>
+</div>    
+</div><!---page-wrap-End--->
+<div class="footer-wrap">
+  <div class="wrap">
+    <div class="panel marRight30">
+      <div class="title">
+        <h1>Testimoniala</h1>
+      </div>
+      <div class="content">
+        <div class="testimonials"> Accusantium dolo remque la udantium totam  consequat tortor pretium sit amet volup </div>
+        <span>- John Goe</span> </div>
+    </div>
+    <div class="panel marRight30">
+      <div class="title">
+        <h1>Newsletter</h1>
+      </div>
+      <div class="content">
+        <ul>
+          <li>
+            <input name="input" type="text"  class="input-newsletter"/>
+          </li>
+          <li>
+            <input type="button" class="button" value="Signup" />
+          </li>
+        </ul>
+        <p>Vivamus lorem lectus, gravida a euismod ut, semper eu lectus lorem ipsum.</p>
+        <span><a href="#">Unsubscribe</a></span> </div>
+    </div>
+    <div class="panel">
+      <div class="title">
+        <h1>Contact us </h1>
+      </div>
+      <div class="cotact">
+        <ul>
+          <li><img src="images/icon6.png" alt="" />(000) 888 888888</li>
+          <li><img src="images/icon7.png" alt="" /><a href="mailto:info@companyname.com">info@companyname.com</a></li>
+          <li><img src="images/icon8.png" alt="" />Name of site owner</li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearing"></div>
+  </div>
+</div><!---footer-wrap--->
+<div class="clearing"></div>
+<div class="copyright-wrap">
+	<div class="wrap">
+    	<div class="content">
+        <p>Copyright (c) websitename. All rights reserved.
+        <<a href="www.alltemplateneeds.com" class="active"> www.alltemplateneeds.com</a> > 
+        Images From:<a href="www.photorack.net"> www.photorack.net</a></p>
+        </div>
+	</div>
+</div><!---copyright-wrap-End--->
+</body>
+</html>
